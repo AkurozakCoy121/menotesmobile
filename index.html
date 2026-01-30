@@ -6,56 +6,332 @@
     <title>MeNotes | Secure Your Ideas</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #020617; color: white; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #020617; 
+            color: white; 
+            overflow-x: hidden;
+        }
         .gradient-text {
-            background: linear-gradient(135deg, #818cf8, #c084fc);
+            background: linear-gradient(135deg, #818cf8, #c084fc, #f472b6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-size: 200% 200%;
+            animation: gradient 8s ease infinite;
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.5);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        .feature-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.8));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            transition: all 0.4s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 20px 40px -20px rgba(99, 102, 241, 0.3);
+        }
+        .download-btn {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef);
+            background-size: 200% 200%;
+            animation: gradient 5s ease infinite;
+            transition: all 0.3s ease;
+        }
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 25px 60px -15px rgba(99, 102, 241, 0.5);
+        }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(99, 102, 241, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+        }
+        .scroll-indicator {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+        }
+        .scroll-indicator::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 2px;
+            animation: scroll 2s infinite;
+        }
+        @keyframes scroll {
+            0% { top: 6px; opacity: 1; }
+            100% { top: 24px; opacity: 0; }
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-6 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-indigo-900/20 via-slate-950 to-slate-950">
-
-    <div class="mb-10 text-center">
-        <div class="w-24 h-24 bg-white rounded-[2.5rem] mx-auto flex items-center justify-center shadow-[0_0_50px_-12px_rgba(99,102,241,0.5)] mb-6 transition-transform hover:scale-105 duration-300">
-            <span class="text-indigo-600 text-4xl font-extrabold">MN</span>
+<body class="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-slate-950 via-indigo-950/40 to-slate-950 relative">
+    
+    <!-- Background elements -->
+    <div class="absolute top-10 left-10 w-72 h-72 bg-purple-900/10 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-10 right-10 w-96 h-96 bg-indigo-900/10 rounded-full blur-3xl"></div>
+    
+    <!-- Floating decorative elements -->
+    <div class="absolute top-1/4 left-1/4 w-4 h-4 bg-indigo-500 rounded-full opacity-70 floating"></div>
+    <div class="absolute bottom-1/3 right-1/4 w-3 h-3 bg-purple-500 rounded-full opacity-60 floating" style="animation-delay: 1s;"></div>
+    <div class="absolute top-1/3 right-1/3 w-2 h-2 bg-pink-500 rounded-full opacity-50 floating" style="animation-delay: 2s;"></div>
+    
+    <!-- Main content -->
+    <div class="relative z-10 w-full max-w-6xl">
+        <!-- Header -->
+        <div class="mb-16 text-center fade-in">
+            <div class="relative w-32 h-32 bg-gradient-to-br from-white to-slate-200 rounded-[2.5rem] mx-auto flex items-center justify-center shadow-[0_0_60px_-12px_rgba(99,102,241,0.7)] mb-8 transition-transform duration-500 hover:scale-110 pulse">
+                <span class="text-5xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">MN</span>
+                <div class="absolute -top-2 -right-2 w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                    <i class="fas fa-lock"></i>
+                </div>
+            </div>
+            <h1 class="text-6xl md:text-7xl font-bold tracking-tight mb-4">Me<span class="gradient-text">Notes</span></h1>
+            <p class="text-slate-400 mt-3 text-xl font-medium max-w-2xl mx-auto">Simple. Private. Powerful. Your thoughts, secured on your device.</p>
+            
+            <!-- Stats bar -->
+            <div class="mt-12 flex flex-wrap justify-center items-center gap-8">
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-white">100%</div>
+                    <div class="text-sm text-slate-400 mt-1">Private</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-white">0</div>
+                    <div class="text-sm text-slate-400 mt-1">Tracking</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-white">∞</div>
+                    <div class="text-sm text-slate-400 mt-1">Notes</div>
+                </div>
+            </div>
         </div>
-        <h1 class="text-5xl font-bold tracking-tight">Me<span class="gradient-text">Notes</span></h1>
-        <p class="text-slate-500 mt-3 text-lg font-medium">Simple. Private. Powerful.</p>
-    </div>
+        
+        <!-- Features grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            <div class="feature-card p-8 rounded-3xl fade-in">
+                <div class="w-16 h-16 bg-gradient-to-br from-indigo-600/20 to-purple-600/20 rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fas fa-shield-alt text-2xl text-indigo-400"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4">Local Storage</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">All notes are stored directly on your device. No cloud synchronization means complete privacy.</p>
+            </div>
+            
+            <div class="feature-card p-8 rounded-3xl fade-in" style="transition-delay: 0.1s;">
+                <div class="w-16 h-16 bg-gradient-to-br from-indigo-600/20 to-purple-600/20 rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fas fa-bolt text-2xl text-indigo-400"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4">Lightning Fast</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Instant note capture with a clean, distraction-free interface that gets out of your way.</p>
+            </div>
+            
+            <div class="feature-card p-8 rounded-3xl fade-in" style="transition-delay: 0.2s;">
+                <div class="w-16 h-16 bg-gradient-to-br from-indigo-600/20 to-purple-600/20 rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fas fa-feather text-2xl text-indigo-400"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4">Minimal Design</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">A thoughtfully designed interface that focuses on what matters: your thoughts and ideas.</p>
+            </div>
+        </div>
+        
+        <!-- Download section -->
+        <div class="glass-card p-10 rounded-[3rem] max-w-2xl mx-auto text-center mb-16 fade-in">
+            <div class="flex justify-center mb-8">
+                <div class="flex items-center bg-slate-800/50 rounded-full px-4 py-2">
+                    <i class="fas fa-android text-emerald-400 mr-2"></i>
+                    <span class="text-sm font-medium">Android Exclusive</span>
+                </div>
+            </div>
+            
+            <h2 class="text-3xl font-bold mb-6">Your Ideas, <span class="gradient-text">Secured.</span></h2>
+            <p class="text-slate-300 text-lg leading-relaxed mb-10 max-w-lg mx-auto">Capture your thoughts instantly with our minimalist Android application. No tracking, no cloud—just you and your notes.</p>
 
-    <div class="glass-card p-10 rounded-[3rem] max-w-md w-full text-center shadow-2xl">
-        <h2 class="text-2xl font-semibold mb-3">Your Ideas, Secured.</h2>
-        <p class="text-slate-400 text-sm leading-relaxed mb-10">Capture your thoughts instantly with our minimalist Android application. No tracking, no cloud—just you and your notes.</p>
+            <a href="https://github.com/AkurozakCoy121/menotesmobile/releases/download/MeNotes/MeNotesMobile.apk" 
+               class="download-btn group relative inline-flex items-center justify-center overflow-hidden rounded-2xl px-10 py-5 font-bold text-white transition-all active:scale-95 shadow-[0_20px_50px_-15px_rgba(79,70,229,0.5)] w-full max-w-md">
+                <div class="absolute inset-0 bg-gradient-to-r from-indigo-700/30 to-purple-700/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <span class="flex items-center gap-3 text-lg relative z-10">
+                    <i class="fas fa-download text-xl"></i>
+                    Download for Android (v1.0.0)
+                </span>
+                <div class="absolute -right-4 top-1/2 transform -translate-y-1/2 text-2xl opacity-0 group-hover:opacity-100 group-hover:right-6 transition-all duration-300">📱</div>
+            </a>
 
-        <a href="https://github.com/AkurozakCoy121/menotesmobile/releases/download/MeNotes/MeNotesMobile.apk" 
-           class="group relative inline-flex w-full items-center justify-center overflow-hidden rounded-2xl bg-indigo-600 px-8 py-5 font-bold text-white transition-all hover:bg-indigo-500 active:scale-95 shadow-[0_20px_50px_-15px_rgba(79,70,229,0.4)]">
-            <span class="flex items-center gap-2 text-lg">
-                Download for Android 📥
-            </span>
-        </a>
-
-        <div class="mt-8 flex items-center justify-center space-x-6 text-[11px] font-bold uppercase tracking-widest text-slate-500">
-            <span>Android 8.0+</span>
-            <span class="w-1.5 h-1.5 bg-slate-700 rounded-full"></span>
-            <span>Version 1.0.0</span>
+            <div class="mt-10 flex flex-wrap items-center justify-center gap-6 text-sm font-medium text-slate-400">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-check-circle text-emerald-400"></i>
+                    <span>Android 8.0+</span>
+                </div>
+                <div class="w-1.5 h-1.5 bg-slate-700 rounded-full"></div>
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-database text-indigo-400"></i>
+                    <span>No Internet Required</span>
+                </div>
+                <div class="w-1.5 h-1.5 bg-slate-700 rounded-full"></div>
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-balance-scale text-amber-400"></i>
+                    <span>Free Forever</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Installation instructions -->
+        <div class="max-w-2xl mx-auto bg-gradient-to-r from-slate-800/30 to-slate-900/30 rounded-3xl p-8 mb-16 fade-in">
+            <h3 class="text-2xl font-bold mb-6 text-center flex items-center justify-center gap-3">
+                <i class="fas fa-info-circle text-indigo-400"></i>
+                Installation Guide
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-slate-800/40 rounded-2xl p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-amber-500/20 rounded-full flex items-center justify-center">
+                            <i class="fas fa-exclamation-triangle text-amber-400"></i>
+                        </div>
+                        <h4 class="text-lg font-bold">Play Protect Warning</h4>
+                    </div>
+                    <p class="text-slate-300 text-sm">If "Play Protect" appears, simply tap <span class="font-bold text-white">"More Details"</span> and then <span class="font-bold text-white">"Install Anyway"</span>.</p>
+                </div>
+                
+                <div class="bg-slate-800/40 rounded-2xl p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-emerald-500/20 rounded-full flex items-center justify-center">
+                            <i class="fas fa-shield-check text-emerald-400"></i>
+                        </div>
+                        <h4 class="text-lg font-bold">Safe & Verified</h4>
+                    </div>
+                    <p class="text-slate-300 text-sm">MeNotes is completely safe. We don't collect any data or require unnecessary permissions.</p>
+                </div>
+            </div>
+            
+            <div class="mt-8 pt-8 border-t border-slate-700/50 text-center">
+                <p class="text-slate-400 text-sm">Download size: ~8 MB • Last updated: March 2026</p>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="text-center mt-8 fade-in">
+            <div class="flex justify-center gap-6 mb-6">
+                <a href="#" class="w-12 h-12 bg-slate-800/50 rounded-full flex items-center justify-center hover:bg-indigo-900/50 transition-colors">
+                    <i class="fab fa-github text-xl"></i>
+                </a>
+                <a href="#" class="w-12 h-12 bg-slate-800/50 rounded-full flex items-center justify-center hover:bg-indigo-900/50 transition-colors">
+                    <i class="fab fa-twitter text-xl"></i>
+                </a>
+                <a href="#" class="w-12 h-12 bg-slate-800/50 rounded-full flex items-center justify-center hover:bg-indigo-900/50 transition-colors">
+                    <i class="fas fa-envelope text-xl"></i>
+                </a>
+            </div>
+            <p class="text-slate-500 text-sm">© 2026 MeNotes Mobile | Crafted with <i class="fas fa-heart text-red-400 mx-1"></i> by Rozak</p>
+            <p class="text-slate-600 text-xs mt-2">All rights reserved. MeNotes is a trademark of Rozak Studios.</p>
         </div>
     </div>
-
-    <div class="mt-12 max-w-sm text-center">
-        <p class="text-[11px] text-slate-500 leading-relaxed italic">
-            Note: If "Play Protect" appears, tap <b>"More Details"</b> and <b>"Install Anyway"</b>.
-        </p>
-        <div class="mt-6 text-slate-600 text-xs">
-            © 2026 MeNotes Mobile | Crafted by Rozak
-        </div>
-    </div>
-
+    
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator hidden md:block"></div>
+    
+    <script>
+        // Fade in animation on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const fadeInOnScroll = function() {
+                fadeElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const elementVisible = 150;
+                    
+                    if (elementTop < window.innerHeight - elementVisible) {
+                        element.classList.add('visible');
+                    }
+                });
+            };
+            
+            // Initial check
+            fadeInOnScroll();
+            
+            // Check on scroll
+            window.addEventListener('scroll', fadeInOnScroll);
+            
+            // Add click animation to download button
+            const downloadBtn = document.querySelector('.download-btn');
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', function(e) {
+                    // Create ripple effect
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.cssText = `
+                        position: absolute;
+                        border-radius: 50%;
+                        background: rgba(255, 255, 255, 0.5);
+                        transform: scale(0);
+                        animation: ripple 0.6s linear;
+                        width: ${size}px;
+                        height: ${size}px;
+                        top: ${y}px;
+                        left: ${x}px;
+                    `;
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            }
+            
+            // Add CSS for ripple effect
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes ripple {
+                    to {
+                        transform: scale(4);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
 </body>
 </html>
